@@ -1,8 +1,14 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import * as THREE from 'three'
+
 function setupModel(data) {
     const model = data.scene.children[0];
-  
-    return model;
+    const clip = data.animations[0];
+    const mixer=new THREE.AnimationMixer(model);
+    const action=mixer.clipAction(clip);
+    action.play();
+    model.tick=(delta)=>mixer.update(delta)
+    return model; 
   }
 const loader= new GLTFLoader();
 //1.基于callback回调
@@ -19,13 +25,12 @@ const [parrotData, flamingoData, storkData] = await Promise.all([
 
 // console.log('loadedData--->',loadedData,loadedData.scene.children[0]);
 const parrot = setupModel(parrotData);
-parrot.position.set(20, 29, 55);
+parrot.position.set(50, 29, 0);
 
 const flamingo = setupModel(flamingoData);
-flamingo.position.set(75, 60, 40);
 
 const stork = setupModel(storkData);
-stork.position.set(-56, 50, 60);
+stork.position.set(-166, 50, -60);
 
 
 export default [stork,parrot,flamingo];
